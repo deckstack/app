@@ -39,7 +39,7 @@ export default () => {
 
     user.save({ ...result.data })
 
-    router.replace("/(tabs)")
+    router.replace("/(tabs)/home")
   }
 
   return (

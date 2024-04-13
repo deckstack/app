@@ -3,7 +3,7 @@ import * as SecureStore from "expo-secure-store"
 
 import { ContextProps, User } from "./types"
 
-const STORAGE_KEY = "-user"
+const STORAGE_KEY = "user"
 export const Context = createContext<ContextProps>({} as ContextProps)
 
 export function useUser() {

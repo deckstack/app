@@ -7,6 +7,7 @@ import { StyleSheet, View } from "react-native"
 // Project
 import { router } from "expo-router"
 import { useUser } from "../contexts/user"
+import { Logo } from "../components/logo"
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState<boolean>(false)
@@ -18,14 +19,14 @@ export default function App() {
   }, [])
 
   async function load() {
-    try {
+    setTimeout(() => {
       user.load()
+      console.log(user)
+      if (!user.data?.username) router.replace("/(login)")
+      else router.replace("/(tabs)/home")
 
-      if (!user.data?.username) router.replace("/(login)/")
-      else router.replace("/(tabs)")
-    } finally {
       setAppIsReady(true)
-    }
+    }, 100)
   }
 
   const onLayoutRootView = useCallback(async () => {
@@ -40,7 +41,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="auto" />
+      <Logo />
     </View>
   )
 }

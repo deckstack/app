@@ -6,28 +6,36 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { Link, router } from "expo-router"
 import { Data } from "./types"
 
-import { Button, Input, Logo } from "@components"
+import { Button, Input, Loader, Logo } from "@components"
 import { post } from "../../functions/server"
 import { useUser } from "../../contexts/user"
 
 export default () => {
   const [data, setData] = useState<Data>({})
+  const [visible, setVisible] = useState<boolean>(false)
 
   const user = useUser()
 
   async function handlerLogin() {
-    const result = await post<any>(`user/login/`, data)
-    if (!result.sucess)
-      if (result.status === 401) {
-        user.save({ username: data.username })
-        return router.push(`confirm?password=${data.password}`)
-      } else return alert(result.message)
+    setVisible(true)
+    try {
+      const result = await post<any>(`user/login/`, data)
+      if (!result.sucess)
+        if (result.status === 401) {
+          user.save({ username: data.username })
+          return router.push(`confirm?password=${data.password}`)
+        } else return alert(result.message)
 
-    router.replace("/(tabs)")
+      user.save({ ...result.data })
+      router.replace("/(tabs)/home")
+    } finally {
+      setVisible(false)
+    }
   }
 
   return (
     <SafeAreaView style={styles.container}>
+      <Loader visible={visible} />
       <View style={styles.topContainer}>
         <View style={styles.logoContainer}>
           <Logo />
