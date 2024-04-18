@@ -5,7 +5,8 @@
     "paths": {
       "@assets/*": ["./assets/*"],
       "@components": ["./src/components/index.ts"],
-      "@functions/*": ["./src/functions/*"]
+      "@functions/*": ["./src/functions/*"],
+      "@constants/*": ["./src/constants/*"]
     }
   }
 }

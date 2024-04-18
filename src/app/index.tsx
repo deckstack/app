@@ -19,10 +19,8 @@ export default function App() {
   }, [])
 
   async function load() {
-    setTimeout(() => {
-      user.load()
-      console.log(user)
-      if (!user.data?.username) router.replace("/(login)")
+    setTimeout(async () => {
+      if (!(await user.load())?.username) router.replace("/(login)")
       else router.replace("/(tabs)/home")
 
       setAppIsReady(true)

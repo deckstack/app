@@ -16,8 +16,11 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   const [data, setData] = useState<User>({})
 
   async function load() {
-    const user = await SecureStore.getItemAsync(STORAGE_KEY)
-    if (user) setData(await JSON.parse(user))
+    const user = await JSON.parse(
+      (await SecureStore.getItemAsync(STORAGE_KEY)) ?? "{}"
+    )
+    setData(user)
+    return user as User
   }
 
   async function save(user: User) {
