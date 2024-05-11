@@ -1,20 +1,26 @@
-import { Response } from "./types"
+import * as SecureStore from 'expo-secure-store'
 
-export async function post<T>(endpoint: string, params: any) {
-  const server = process.env.HOST_SERVER ?? "100.127.187.90"
-  const port = process.env.HOST_PORT ?? "3000"
+import { Response } from './types'
+
+export async function request<T>(
+  method: 'POST' | 'GET',
+  endpoint: string,
+  params: any
+) {
+  const server = process.env.EXPO_PUBLIC_HOST_SERVER
+  const port = process.env.EXPO_PUBLIC_HOST_PORT ?? '3000'
   const host = `http://${server}:${port}`
+  const user = await JSON.parse(SecureStore.getItem('user') ?? '{}')
 
   const result = await fetch(`${host}/${endpoint}`, {
-    method: "POST",
+    method,
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(params),
+    body: JSON.stringify({ ...params, token: user.token }),
   })
 
   const content = await result.json()
-
   const response: Response<T> = {
     status: result.status,
     sucess: result.ok,
@@ -24,3 +30,12 @@ export async function post<T>(endpoint: string, params: any) {
 
   return response
 }
+
+export async function get<T>(endpoint: string, params: any) {
+  return request<T>('GET', endpoint, params)
+}
+
+export async function post<T>(endpoint: string, params: any) {
+  return request<T>('POST', endpoint, params)
+}
+

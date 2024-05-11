@@ -1,11 +1,12 @@
 export default {
-  mainPurble: "#8E2ADD",
-  mainSalmon: "#FF728B",
-  mainGreen: "#67F823",
-  mainBlue: "#7281FF",
+  mainFirst: "#FFE333",
+  mainSecond: "#FF728B",
+  mainThird: "#ADADAD",
+  mainFourth: "#67F823",
+  mainFifith: "#8E2ADD",
 
   textBlack: "#000",
-  textGray: "#444",
+  textGray: "#444444bb",
   textWhite: "#fff",
 
   iconBlack: "#000",

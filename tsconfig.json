@@ -6,7 +6,8 @@
       "@assets/*": ["./assets/*"],
       "@components": ["./src/components/index.ts"],
       "@functions/*": ["./src/functions/*"],
-      "@constants/*": ["./src/constants/*"]
+      "@constants/*": ["./src/constants/*"],
+      "@contexts/*": ["./src/contexts/*"]
     }
   }
 }

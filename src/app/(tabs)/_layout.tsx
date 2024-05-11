@@ -1,15 +1,17 @@
-import { AntDesign } from "@expo/vector-icons"
+import { AntDesign, FontAwesome6 } from "@expo/vector-icons"
 import { Tabs } from "expo-router"
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { StyleSheet, TouchableOpacity, View } from "react-native"
 
 import color from "@constants/colors"
+import { StatusBar } from "expo-status-bar"
 
 export default function TabsLayout() {
   const colors: string[] = [
-    color.mainPurble,
-    color.mainSalmon,
-    color.mainPurble,
-    color.mainGreen,
+    color.mainFirst,
+    color.mainSecond,
+    color.mainThird,
+    color.mainFourth,
+    color.mainFifith,
   ]
 
   return (
@@ -21,62 +23,69 @@ export default function TabsLayout() {
       }}
       tabBar={(props) => {
         return (
-          <View
-            style={{
-              ...styles.tabBarOuter,
-              backgroundColor: `${colors[props.state.index]}`,
-            }}
-          >
-            <View style={styles.tabBarInner}>
-              {props.state.routes.map((route, index) => {
-                const { options } = props.descriptors[route.key]
-                const isFocused = index === props.state.index
-                const label =
-                  (options.tabBarLabel as string) ??
-                  options.title ??
-                  String(route.name)
+          <>
+            <StatusBar backgroundColor={colors[props.state.index]} />
+            <View
+              style={{
+                ...styles.tabBarOuter,
+                backgroundColor: `${colors[props.state.index]}`,
+              }}
+            >
+              <View style={styles.tabBarInner}>
+                {props.state.routes.map((route, index) => {
+                  const { options } = props.descriptors[route.key]
+                  const isFocused = index === props.state.index
+                  const label =
+                    (options.tabBarLabel as string) ??
+                    options.title ??
+                    String(route.name)
 
-                const onPress = () => {
-                  const event = props.navigation.emit({
-                    type: "tabPress",
-                    target: route.key,
-                    canPreventDefault: true,
-                  })
+                  const onPress = () => {
+                    const event = props.navigation.emit({
+                      type: "tabPress",
+                      target: route.key,
+                      canPreventDefault: true,
+                    })
 
-                  if (!isFocused && !event.defaultPrevented)
-                    props.navigation.navigate(route.name, route.params)
-                }
+                    if (!isFocused && !event.defaultPrevented)
+                      props.navigation.navigate(route.name, route.params)
+                  }
 
-                const onLongPress = () => {
-                  props.navigation.emit({
-                    type: "tabLongPress",
-                    target: route.key,
-                  })
-                }
+                  const onLongPress = () => {
+                    props.navigation.emit({
+                      type: "tabLongPress",
+                      target: route.key,
+                    })
+                  }
 
-                return (
-                  <TouchableOpacity
-                    key={route.key}
-                    onPress={onPress}
-                    onLongPress={onLongPress}
-                    style={{
-                      ...styles.tabRoute,
-                      backgroundColor: isFocused ? colors[index] : "#000",
-                      height: isFocused ? 90 : 40,
-                      marginTop: isFocused ? -30 : 0,
-                    }}
-                  >
-                    <View style={styles.icon}>
-                      {options?.tabBarIcon?.(undefined as any)}
-                      {!isFocused && (
-                        <Text style={{ color: "#fff" }}>{label}</Text>
-                      )}
-                    </View>
-                  </TouchableOpacity>
-                )
-              })}
+                  return (
+                    <TouchableOpacity
+                      key={route.key}
+                      onPress={onPress}
+                      onLongPress={onLongPress}
+                      style={{
+                        ...styles.tabRoute,
+                        backgroundColor: isFocused ? colors[index] : "#000",
+                        height: isFocused ? 90 : 40,
+                        marginTop: isFocused ? -30 : 0,
+                      }}
+                    >
+                      <View style={styles.icon}>
+                        {options?.tabBarIcon?.({
+                          focused: isFocused,
+                          size: 0,
+                          color: "#fff",
+                        })}
+                        {/*!isFocused && Boolean(label) && (
+                          <Text style={{ color: "#fff" }}>{label}</Text>
+                        )*/}
+                      </View>
+                    </TouchableOpacity>
+                  )
+                })}
+              </View>
             </View>
-          </View>
+          </>
         )
       }}
     >
@@ -88,11 +97,24 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="ranking"
+        name="search"
         options={{
-          title: "Ranking",
+          title: "Pesquisar",
           tabBarIcon: () => (
-            <AntDesign name="Trophy" size={18} color={"#fff"} />
+            <AntDesign name="search1" size={18} color={"#fff"} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="card"
+        options={{
+          title: "",
+          tabBarIcon: (props) => (
+            <FontAwesome6
+              name="layer-group"
+              size={22}
+              color={props.focused ? "#000" : "#fff"}
+            />
           ),
         }}
       />

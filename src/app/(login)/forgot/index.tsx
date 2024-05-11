@@ -15,7 +15,7 @@ export default () => {
     if (phase === 1) {
       if (!user.email) return alert("Informe o e-mail")
 
-      const response = await post<any>("user/forgot", {
+      const response = await post<any>("auth/forgot", {
         email: user.email,
       })
 
@@ -39,7 +39,7 @@ export default () => {
       return alert("Informe todos os campos")
 
     console.log(user)
-    const response = await post<any>("user/reset", {
+    const response = await post<any>("auth/reset", {
       ...user,
     })
 

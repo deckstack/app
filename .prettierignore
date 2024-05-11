@@ -1,0 +1,28 @@
+# Nodejs
+node_modules/
+package-lock.json
+
+# Docker
+docker-compose.yaml
+docker-compose.yml
+compose.yaml
+compose.yml
+
+# Builds
+build/
+
+# Project
+.git/
+.gitignore
+
+# Tests
+coverage/
+# test/
+
+# Enviroment
+.env*
+
+# Project configs
+.editorconfi
+tsconfig.*.json
+tsconfig.json

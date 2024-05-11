@@ -1,11 +1,11 @@
 /* Dependencies */
-import type { TextInputProps, TextStyle, ViewStyle } from "react-native"
+import type { TextInputProps, TextStyle, ViewStyle } from 'react-native'
 
-export interface InputProps extends TextInputProps {
+export interface DefaultInputProps extends TextInputProps {
   disabled?: boolean
   label?: string
   visible?: boolean
-  type?: "text" | "password" | "numeric"
+  type?: 'text' | 'password' | 'numeric' | 'search'
   value: string | undefined
   onChangeText: (value: string) => void
   onFormat?: (value: string) => Promise<string> | string
@@ -17,5 +17,6 @@ export interface InputRef {
 }
 
 export type InputForwardedRef = (
-  props: InputProps & { ref?: React.ForwardedRef<InputRef> }
+  props: DefaultInputProps & { ref?: React.ForwardedRef<InputRef> }
 ) => React.ReactElement
+

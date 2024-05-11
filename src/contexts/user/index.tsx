@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState } from "react"
 import * as SecureStore from "expo-secure-store"
 
 import { ContextProps, User } from "./types"
+import { router } from "expo-router"
 
 const STORAGE_KEY = "user"
 export const Context = createContext<ContextProps>({} as ContextProps)
@@ -23,6 +24,12 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     return user as User
   }
 
+  function logout() {
+    setData({})
+    SecureStore.deleteItemAsync(STORAGE_KEY)
+    router.replace("/(login)")
+  }
+
   async function save(user: User) {
     setData(user)
     await SecureStore.setItemAsync(STORAGE_KEY, JSON.stringify(user))
@@ -34,7 +41,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   return (
-    <Context.Provider value={{ load, save, unload, data }}>
+    <Context.Provider value={{ load, logout, save, unload, data }}>
       {children}
     </Context.Provider>
   )

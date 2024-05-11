@@ -12,6 +12,7 @@ export type UserProviderProps = {
 
 export type ContextProps = {
   load: () => Promise<User>
+  logout: () => void
   save: (user: User) => void
   unload: () => void
   data: User

@@ -9,46 +9,48 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context"
 import { FontAwesome } from "@expo/vector-icons"
 
-import { Logo } from "@components"
-import { useState } from "react"
+import { Loader, Logo } from "@components"
+import { useCallback, useState } from "react"
 import { Post } from "./types"
 import colors from "@constants/colors"
+import { useFocusEffect } from "expo-router"
+import user from "../user"
+import { useUser } from "../../../contexts/user"
+import { post } from "@functions/server"
 
 export default () => {
-  const [data, setData] = useState<Post[]>([
-    {
-      postId: 1,
-      user: { userId: 1, username: "Tobias da Sinuca" },
-      comments: 20,
-      likes: 10,
-      picture:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfD0CeSshCCzd4JaDmz1vCywvlDD9rpWohBrI6_oIiUA&s",
-    },
-    {
-      postId: 2,
-      user: { userId: 1, username: "Pedrito Meriva" },
-      comments: 20,
-      likes: 10,
-      picture:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtvjTYrgAfjJfqJwc3wi0OP_tImvOoXhzNAFpkp5a5wQ&s",
-    },
-    {
-      postId: 3,
-      user: { userId: 1, username: "Tobias da Sinuca" },
-      comments: 20,
-      likes: 10,
-      picture:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfD0CeSshCCzd4JaDmz1vCywvlDD9rpWohBrI6_oIiUA&s",
-    },
-    {
-      postId: 4,
-      user: { userId: 1, username: "Tobias da Sinuca" },
-      comments: 20,
-      likes: 10,
-      picture:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfD0CeSshCCzd4JaDmz1vCywvlDD9rpWohBrI6_oIiUA&s",
-    },
-  ])
+  const user = useUser()
+
+  const [data, setData] = useState<Post[]>([])
+  const [loading, setLoading] = useState(false)
+
+  useFocusEffect(
+    useCallback(() => {
+      loadData()
+    }, [])
+  )
+
+  async function loadData() {
+    setLoading(true)
+    try {
+      await user.load()
+      //await getPosts()
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function getPosts() {
+    setLoading(true)
+    try {
+      const response = await post<Post[]>("post/list", {
+        userId: user.data.username,
+      })
+      setData(response.data)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <SafeAreaView
@@ -57,6 +59,7 @@ export default () => {
         backgroundColor: colors.mainBackground,
       }}
     >
+      {/* <Loader visible={loading} /> */}
       <View style={styles.header}>
         <Pressable style={styles.headerIconContainer}>
           <FontAwesome name="bell-o" size={18} color={"#444"} />

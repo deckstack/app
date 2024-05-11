@@ -1,14 +1,14 @@
-import React, { useCallback, useEffect, useState } from "react"
-import { StyleSheet, View } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
+import React, { useCallback, useEffect, useState } from 'react'
+import { StyleSheet, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { Button, Input, Logo } from "@components"
-import { post } from "@functions/server"
-import { router, useFocusEffect, useGlobalSearchParams } from "expo-router"
-import { useUser } from "../../../contexts/user"
+import { Button, Input, Logo } from '@components'
+import { post } from '@functions/server'
+import { router, useFocusEffect, useGlobalSearchParams } from 'expo-router'
+import { useUser } from '../../../contexts/user'
 
 export default () => {
-  const [token, setToken] = useState<string>("")
+  const [token, setToken] = useState<string>('')
 
   const user = useUser()
   const params = useGlobalSearchParams()
@@ -21,16 +21,16 @@ export default () => {
 
   async function handlerPressButton() {
     if (!token || token.length < 6)
-      return alert("Código de verificação inválido")
+      return alert('Código de verificação inválido')
 
-    const confirm = await post<any>("user/confirm/", {
+    const confirm = await post<any>('auth/confirm/', {
       username: user.data.username,
       token,
     })
     console.log(confirm)
     if (!confirm.sucess) return alert(confirm.message)
 
-    const result = await post<any>("user/login/", {
+    const result = await post<any>('auth/login/', {
       username: user.data.username,
       password: params.password,
     })
@@ -39,7 +39,7 @@ export default () => {
 
     user.save({ ...result.data })
 
-    router.replace("/(tabs)/home")
+    router.replace('/(tabs)/home')
   }
 
   return (
@@ -47,12 +47,12 @@ export default () => {
       <View style={styles.topContainer}>
         <View style={styles.inputContainer}>
           <Input
-            label={"Código de verificação"}
+            label={'Código de verificação'}
             maxLength={6}
             value={token}
             onChangeText={(text) => setToken(text)}
           />
-          <Button label={"Confirmar"} onPress={handlerPressButton} />
+          <Button label={'Confirmar'} onPress={handlerPressButton} />
         </View>
       </View>
     </SafeAreaView>
@@ -68,41 +68,42 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: 'center',
     gap: 20,
   },
   logoContainer: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   textEmphasis: {
     fontSize: 34,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   inputContainer: {
     gap: 20,
   },
   input: {
     height: 60,
-    width: "100%",
+    width: '100%',
   },
   forgotText: {
     fontSize: 14,
-    color: "#aaa",
+    color: '#aaa',
     flex: 1,
-    textAlign: "right",
+    textAlign: 'right',
   },
   buttonShadow: {
     width: 90,
     height: 60,
     borderRadius: 8,
-    borderLeftColor: "#00000011",
+    borderLeftColor: '#00000011',
     borderLeftWidth: 4,
-    borderBottomColor: "#00000011",
+    borderBottomColor: '#00000011',
     borderBottomWidth: 5,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   text: {
     fontSize: 18,
   },
 })
+
